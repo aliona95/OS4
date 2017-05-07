@@ -1,0 +1,74 @@
+//Truksta jump not equal
+//pliusai, minusai
+//paryskinimas
+//db duomenys 0000d '  '
+#program
+$WOW
+.DAT 7
+0001
+0001
+3333
+$WRT
+LA90
+LA90
+CA90
+JN01
+HALT
+$END
+#Jmp
+$WOW
+.DAT 7
+5555
+7777
+$WRT
+LA90
+JP03
+LA91
+LA90
+LA91
+LA92
+LA90
+LA93
+LA91
+LA90
+LA91
+LA92
+LA90
+LA03
+HALT
+$END
+#programa1
+$WOW
+.DAT 3
+1110
+1111
+3333
+$WRT
+IP90
+OPD0
+HALT
+$END
+#programa
+$WOW
+.DAT 7
+1111
+1110
+3333
+$WRT
+LA90
+BA91
+CA91
+JL00
+HALT
+$END
+#programa1
+$WOW
+.DAT 3
+1110
+1111
+3333
+$WRT
+IP90
+OPD0
+HALT
+$END
