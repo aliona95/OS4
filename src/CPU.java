@@ -21,6 +21,9 @@ public class CPU {
 		this.setPLR(PLR);
 		this.setMODE(MODE);
 	}
+	CPU(){
+		
+	}
 
 	public byte[] getPLR() {
 		return PLR;

@@ -1,7 +1,7 @@
 
 public class Struct implements Comparable<Struct>{
 	int processId;
-	int partOfResource; ///???
+	int partOfResource;
 	int priority;
 	String info;
 

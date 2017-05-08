@@ -31,7 +31,7 @@ import javax.swing.JTabbedPane;
 // norint pakeisti failu sistemos failo pavadinima:
 // ctrl+f fileSystem = "failas.txt";
 public class RM {
-	private static JFrame frmMm;
+	static JFrame frmMm;
 	public static JTable table_1;
 	public static String fileSystem;
 	public static TextField textAX;
@@ -58,7 +58,7 @@ public class RM {
 	 * Launch the application.
 	 */
 	
-	public static void main(String[] args){
+	public static void main(){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -350,10 +350,12 @@ public class RM {
 		frmMm.getContentPane().add(label_13);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 455, 285, 212);
+		scrollPane_1.setEnabled(false);
+		scrollPane_1.setBounds(10, 455, 343, 212);
 		frmMm.getContentPane().add(scrollPane_1);
 		
 		table = new JTable();
+		table.setEnabled(false);
 		table.setBackground(new Color(255, 255, 153));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
