@@ -2,6 +2,17 @@
 //pliusai, minusai
 //paryskinimas
 //db duomenys 0000d '  '
+#programa1
+$WOW
+.DAT 3
+1110
+1111
+3333
+$WRT
+IP90
+OPD0
+HALT
+$END
 #program
 $WOW
 .DAT 7
@@ -35,17 +46,6 @@ LA91
 LA92
 LA90
 LA03
-HALT
-$END
-#programa1
-$WOW
-.DAT 3
-1110
-1111
-3333
-$WRT
-IP90
-OPD0
 HALT
 $END
 #programa

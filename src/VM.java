@@ -34,6 +34,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.JCheckBox;
+import javax.swing.JTextPane;
+import javax.swing.JLabel;
 
 public class VM extends Thread{
 	Machine machine;
@@ -49,11 +51,14 @@ public class VM extends Thread{
 	public static TextField textDS;
 	public static TextField textCS;
 	private TextField textField;
+	public static JTextPane textPane;
+	public static JTextPane textPane_1;
 	private Label label;
 	private TextField textField_1;
 	private Label label_1;
 	public static int vmTableRow = 0;
 	public static int vmTableColumn = 0;
+	public static boolean enterInputText = false;
 	/**
 	 * Launch the application.
 	 */
@@ -106,12 +111,12 @@ public class VM extends Thread{
 		frmVm.getContentPane().setLayout(null);
 		
 		Label label_2 = new Label("Registrai");
-		label_2.setForeground(Color.BLUE);
-		label_2.setBounds(28, 30, 62, 22);
+		label_2.setForeground(new Color(0, 128, 128));
+		label_2.setBounds(26, 10, 62, 22);
 		frmVm.getContentPane().add(label_2);
 		
 		Label label_3 = new Label("AX");
-		label_3.setBounds(26, 66, 28, 22);
+		label_3.setBounds(26, 38, 28, 22);
 		frmVm.getContentPane().add(label_3);
 		
 		textAX = new TextField();
@@ -120,11 +125,11 @@ public class VM extends Thread{
 		textAX.setEnabled(false);
 		textAX.setBackground(Color.LIGHT_GRAY);
 		textAX.setForeground(Color.BLACK);
-		textAX.setBounds(60, 66, 72, 22);
+		textAX.setBounds(60, 38, 72, 22);
 		frmVm.getContentPane().add(textAX);
 		
 		Label label_4 = new Label("BX");
-		label_4.setBounds(26, 107, 28, 22);
+		label_4.setBounds(26, 66, 28, 22);
 		frmVm.getContentPane().add(label_4);
 		
 		textBX = new TextField();
@@ -132,11 +137,11 @@ public class VM extends Thread{
 		textBX.setEnabled(false);
 		textBX.setEditable(false);
 		textBX.setBackground(Color.LIGHT_GRAY);
-		textBX.setBounds(60, 107, 72, 22);
+		textBX.setBounds(60, 66, 72, 22);
 		frmVm.getContentPane().add(textBX);
 		
 		Label label_6 = new Label("IC");
-		label_6.setBounds(152, 66, 28, 22);
+		label_6.setBounds(138, 38, 22, 22);
 		frmVm.getContentPane().add(label_6);
 		
 		textIC = new TextField();
@@ -144,11 +149,11 @@ public class VM extends Thread{
 		textIC.setEnabled(false);
 		textIC.setEditable(false);
 		textIC.setBackground(Color.LIGHT_GRAY);
-		textIC.setBounds(183, 66, 47, 22);
+		textIC.setBounds(166, 38, 47, 22);
 		frmVm.getContentPane().add(textIC);
 		
 		Label label_7 = new Label("C");
-		label_7.setBounds(152, 107, 22, 22);
+		label_7.setBounds(138, 66, 26, 22);
 		frmVm.getContentPane().add(label_7);
 		
 		textC = new TextField();
@@ -156,11 +161,11 @@ public class VM extends Thread{
 		textC.setEnabled(false);
 		textC.setEditable(false);
 		textC.setBackground(Color.LIGHT_GRAY);
-		textC.setBounds(183, 107, 47, 22);
+		textC.setBounds(166, 66, 47, 22);
 		frmVm.getContentPane().add(textC);
 		
 		Label label_9 = new Label("SF");
-		label_9.setBounds(249, 66, 22, 22);
+		label_9.setBounds(219, 38, 22, 22);
 		frmVm.getContentPane().add(label_9);
 		
 		textSF = new TextField();
@@ -168,7 +173,7 @@ public class VM extends Thread{
 		textSF.setEnabled(false);
 		textSF.setEditable(false);
 		textSF.setBackground(Color.LIGHT_GRAY);
-		textSF.setBounds(277, 66, 72, 22);
+		textSF.setBounds(247, 38, 72, 22);
 		frmVm.getContentPane().add(textSF);
 		
 		table = new JTable();
@@ -203,7 +208,7 @@ public class VM extends Thread{
 		
 		// !!!!! UZSETINTI VISA LENTELE NULIAIS
 		table.setBackground(new Color(255, 215, 0));
-		table.setBounds(30, 177, 636, 272);
+		table.setBounds(26, 105, 636, 272);
 		
 		/////////////////////////////////////////////////////////////////////
 		/*VM.MyCellRenderer mcr = new VM.MyCellRenderer();
@@ -219,11 +224,11 @@ public class VM extends Thread{
 		textDS.setEnabled(false);
 		textDS.setEditable(false);
 		textDS.setBackground(Color.LIGHT_GRAY);
-		textDS.setBounds(277, 107, 72, 22);
+		textDS.setBounds(247, 66, 72, 22);
 		frmVm.getContentPane().add(textDS);
 		
 		label = new Label("DS");
-		label.setBounds(249, 107, 22, 22);
+		label.setBounds(219, 66, 22, 22);
 		frmVm.getContentPane().add(label);
 		
 		textCS = new TextField();
@@ -231,15 +236,16 @@ public class VM extends Thread{
 		textCS.setEnabled(false);
 		textCS.setEditable(false);
 		textCS.setBackground(Color.LIGHT_GRAY);
-		textCS.setBounds(398, 66, 72, 22);
+		textCS.setBounds(354, 66, 72, 22);
 		frmVm.getContentPane().add(textCS);
 		
 		label_1 = new Label("CS");
-		label_1.setBounds(370, 66, 22, 22);
+		label_1.setBounds(325, 66, 22, 22);
 		frmVm.getContentPane().add(label_1);
 		
 		JButton btnNuolatinis = new JButton("Nuolatinis");
-		btnNuolatinis.setBackground(Color.LIGHT_GRAY);
+		btnNuolatinis.setForeground(new Color(255, 255, 255));
+		btnNuolatinis.setBackground(new Color(0, 128, 128));
 		btnNuolatinis.setToolTipText("");
 		btnNuolatinis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -248,11 +254,12 @@ public class VM extends Thread{
 				mode = 2;
 			}
 		});
-		btnNuolatinis.setBounds(523, 107, 100, 22);
+		btnNuolatinis.setBounds(562, 66, 100, 22);
 		frmVm.getContentPane().add(btnNuolatinis);
 		
 		JButton btningsninis = new JButton("\u017Dingsninis");
-		btningsninis.setBackground(Color.LIGHT_GRAY);
+		btningsninis.setForeground(new Color(255, 255, 255));
+		btningsninis.setBackground(new Color(0, 128, 128));
 		btningsninis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println("PASPAUSTA Zingsninis");
@@ -270,14 +277,45 @@ public class VM extends Thread{
 				frmVm.validate();
 			}
 		});
-		btningsninis.setBounds(523, 66, 100, 23);
+		btningsninis.setBounds(562, 37, 100, 23);
 		frmVm.getContentPane().add(btningsninis);
 		
 		Label label_5 = new Label("Re\u017Eimai");
-		label_5.setForeground(Color.BLUE);
-		label_5.setBounds(523, 30, 62, 22);
+		label_5.setForeground(new Color(0, 128, 128));
+		label_5.setBounds(562, 10, 62, 22);
 		frmVm.getContentPane().add(label_5);
-		frmVm.setBounds(100, 100, 703, 510);
+		
+		/*JTextPane*/ textPane = new JTextPane();
+		textPane.setBackground(new Color(211, 211, 211));
+		textPane.setBounds(26, 408, 262, 103);
+		frmVm.getContentPane().add(textPane);
+		
+		/*JTextPane */textPane_1 = new JTextPane();
+		textPane_1.setBackground(new Color(211, 211, 211));
+		textPane_1.setBounds(366, 408, 296, 103);
+		frmVm.getContentPane().add(textPane_1);
+		
+		Label label_8 = new Label("\u012Evedimas");
+		label_8.setForeground(new Color(0, 128, 128));
+		label_8.setBounds(26, 383, 62, 22);
+		frmVm.getContentPane().add(label_8);
+		
+		Label label_10 = new Label("I\u0161vedimas");
+		label_10.setForeground(new Color(0, 128, 128));
+		label_10.setBounds(366, 383, 62, 22);
+		frmVm.getContentPane().add(label_10);
+		
+		JButton btnvesti = new JButton("\u012Evesti");
+		btnvesti.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				enterInputText = true;
+			}
+		});
+		btnvesti.setForeground(new Color(255, 255, 255));
+		btnvesti.setBackground(new Color(0, 128, 128));
+		btnvesti.setBounds(199, 522, 89, 23);
+		frmVm.getContentPane().add(btnvesti);
+		frmVm.setBounds(100, 100, 703, 595);
 		frmVm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	/*
@@ -385,5 +423,4 @@ public class VM extends Thread{
         	return cellComponent;
         }
 	}    
-	
 }

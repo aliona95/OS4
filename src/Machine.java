@@ -10,6 +10,7 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableCellRenderer;
 
 
@@ -825,7 +826,13 @@ public class Machine implements Runnable{
 			System.out.println("INPUT DATA ");
 			//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			//String input = br.readLine();
-			String input = JOptionPane.showInputDialog("Input");
+			//String input = JOptionPane.showInputDialog("Input");
+			JOptionPane.showMessageDialog(null, "Áveskite duomenis á ávedimo langà","Data input", JOptionPane.INFORMATION_MESSAGE);
+			String input = "";
+			while(!VM.enterInputText){
+				System.out.print("");
+			}
+			input = VM.textPane.getText();
 			System.out.println("DATA " + input);
 			int length = input.length();
 			if(length > 64){
@@ -885,7 +892,8 @@ public class Machine implements Runnable{
 				output += String.valueOf(Character.toChars(channelDeviceBuffer[i]));
 			}
 			System.out.println(output);
-			JOptionPane.showMessageDialog(null, output ,"Data output", JOptionPane.INFORMATION_MESSAGE);
+			VM.textPane_1.setText(output);
+			//JOptionPane.showMessageDialog(null, output ,"Data output", JOptionPane.INFORMATION_MESSAGE);
 			
 			cpu.setCH2((byte) 0);
 			byte IOI = cpu.getIOI();
