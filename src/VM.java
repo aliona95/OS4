@@ -358,13 +358,42 @@ public class VM extends Thread{
     			if(!memory.trim().isEmpty()){
     				//System.out.println("DUOMENYS " + memory + memory.length()) ;
     			}
-    			System.out.println("memory " +memory);
+    			System.out.println("memory " + memory);
     			table.setValueAt(memory, row, column);
     			memory = "";
     		}
     	}
 	}
 	public static void printRegisters(CPU cpu){
+		    textAX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[0])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[1])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[2])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[3])).toUpperCase());
+			
+			textBX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[0])).toUpperCase() + "|" +
+					Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[1])).toUpperCase() + "|" +
+					Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[2])).toUpperCase() + "|" +
+					Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[3])).toUpperCase());
+			
+			textSF.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getSF())).toUpperCase());
+			
+			textIC.setText((Integer.toHexString(cpu.getIC()[0]).toUpperCase()) + "|" + 
+		        	Integer.toHexString(cpu.getIC()[1]).toUpperCase());
+			
+			if(cpu.getC() == 0){
+				textC.setText("FALSE");
+			}else{
+				textC.setText("TRUE");
+			}
+			
+		    //skaiciuojame realioje atmintyje kodo ir duomenu segmentu adresus
+			byte CS[] = cpu.getCS();
+			byte DS[] = cpu.getDS();
+			int segment = Machine.realAddress(CS[0], CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE;
+			textCS.setText(Integer.toHexString(segment).toUpperCase()+ "|0");
+			segment = Machine.realAddress(DS[0], CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE ;
+			textDS.setText(Integer.toHexString(segment).toUpperCase()+ "|0");
+		
 		/*
 		textAX.setText(Integer.toHexString(Machine.unsignedToBytes(Machine.AX[0])).toUpperCase() + 
 			Integer.toHexString(Machine.unsignedToBytes(Machine.AX[1])).toUpperCase() + 
@@ -394,13 +423,9 @@ public class VM extends Thread{
 	public void setModeWait(){
 		mode = 0;
 	}
-	//////
 	
 	public static class MyCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
 
-        /**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -413,13 +438,13 @@ public class VM extends Thread{
         		VM.setVmColumn(Machine.jumpToColumn);
         		VM.setVmRow(Machine.jumpToRow);
         		setBackground((row == VM.getVmRow() + 1) && (column == VM.getVmColumn() + 1) ? Color.lightGray : new Color(255, 215, 0));
-        		System.out.println("JUMPAS " + Machine.jumpToColumn + " " + Machine.jumpToRow);
+        		//System.out.println("JUMPAS " + Machine.jumpToColumn + " " + Machine.jumpToRow);
         		Machine.isJump = false;
         	}else{
         		setBackground((row == VM.getVmRow() + 1) && (column == VM.getVmColumn()) ? Color.lightGray : new Color(255, 215, 0));
         	}
-        	System.out.println("VM ROW = " + VM.getVmRow());
-        	System.out.println("VM COLUMN = " + VM.getVmColumn());
+        	//System.out.println("VM ROW = " + VM.getVmRow());
+        	//System.out.println("VM COLUMN = " + VM.getVmColumn());
         	return cellComponent;
         }
 	}    

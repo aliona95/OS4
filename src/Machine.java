@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  *  
  */
 public class Machine implements Runnable{
-	private CPU cpu;
+	private static CPU cpu;
 	public final static int WORD_SIZE = 4;
 	public final static int BLOCK_SIZE = 16;
 	public final static int USER_BLOCKS = 48;
@@ -128,7 +128,7 @@ public class Machine implements Runnable{
     		memory[address + i] = (byte) command.charAt(i); 
     	}
     }
-    public int realAddress(int x, int y) {
+    public static int realAddress(int x, int y) {
     	byte PLR[] = cpu.getPLR();
 		int pagingTableAddr = (((int) PLR[2]) * 10 + (int) PLR[3]) * BLOCK_SIZE * WORD_SIZE;
 		//System.out.println("PAGING TABLE ADDRESS " + pagingTableAddr);
@@ -447,15 +447,16 @@ public class Machine implements Runnable{
     	}
     	String hexSum = Long.toHexString(sum).toUpperCase();
     	
-    	
-    	///////////////////////////////////////////////////////////////////////////
-    	if(hexSum.length() == 8){
-    		for(int i = 0; i < WORD_SIZE; i++){
-    			String hex = hexSum.substring(i * 2, (i * 2) + 2);
-    			System.out.println(Integer.parseInt(hex, 16));
-    			AX[i] = (byte) Integer.parseInt(hex, 16);
-    		}
+    	while(hexSum.length() != 8){
+    		hexSum = "0" + hexSum; 
     	}
+    	//if(hexSum.length() == 8){
+    	for(int i = 0; i < WORD_SIZE; i++){
+    		String hex = hexSum.substring(i * 2, (i * 2) + 2);
+    		System.out.println(Integer.parseInt(hex, 16));
+   			AX[i] = (byte) Integer.parseInt(hex, 16);
+   		}
+    	//}
     	cpu.setAX(AX);
     }
     public void commandBB(int x, int y){
@@ -489,15 +490,16 @@ public class Machine implements Runnable{
     	}
     	String hexSum = Long.toHexString(sum).toUpperCase();
     	
-    	
-    	///////////////////////////////////////////////////////////////////////////
-    	if(hexSum.length() == 8){
-    		for(int i = 0; i < WORD_SIZE; i++){
-    			String hex = hexSum.substring(i * 2, (i * 2) + 2);
-    			System.out.println(Integer.parseInt(hex, 16));
-    			BX[i] = (byte) Integer.parseInt(hex, 16);
-    		}
+    	while(hexSum.length() != 8){
+    		hexSum = "0" + hexSum; 
     	}
+    	//if(hexSum.length() == 8){
+    	for(int i = 0; i < WORD_SIZE; i++){
+    		String hex = hexSum.substring(i * 2, (i * 2) + 2);
+    		System.out.println(Integer.parseInt(hex, 16));
+    		BX[i] = (byte) Integer.parseInt(hex, 16);
+    	}
+    	//}
     	cpu.setBX(BX);
     }
     // LOGINES KOMANDOS
@@ -509,7 +511,7 @@ public class Machine implements Runnable{
     	byte AX[] = cpu.getAX();
     	System.out.println("CPU GETA AX " + cpu.getAX()[0]);
     	for(int i = 0; i < WORD_SIZE; i++){
-    		if(AX[i] == memory[address + i]){
+    		if(AX[i] == memory[address + i] - 48){ //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     			correct++;
     		}
     	}
@@ -888,8 +890,13 @@ public class Machine implements Runnable{
 				System.out.write(channelDeviceBuffer[i]);
 			}
 			String output = "";
+			int counter = 1;
 			for(int i = 0; i < channelDeviceBuffer.length; i++){
 				output += String.valueOf(Character.toChars(channelDeviceBuffer[i]));
+				if(output.length() > 24 * counter){
+					output +="\n";
+					counter++;
+				}
 			}
 			System.out.println(output);
 			VM.textPane_1.setText(output);
@@ -988,10 +995,10 @@ public class Machine implements Runnable{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    	/*
-    	if(Machine.PLR[3] == 4){
+    	
+    	if(cpu.getPLR()[3] == 4){
     		programsNum = 0;
-        */
+    	}
     	//Machine machine = new Machine();
         loader = new Loader(fileSystem); // gauname programu masyvo vardus
         try{
@@ -1007,14 +1014,14 @@ public class Machine implements Runnable{
     		//machine.printRegisters();
     	}
     	for(int i = 0; i < programNameNum; i++){
+    		cpu.clearRegisters();
     		//clearRegistersVm();
-    		/*
-    		if(Machine.PLR[3] == 4){
+    		if(cpu.getPLR()[3] == 4){
         		programsNum = 0;
-        		machine.clearRegisters();
-        		machine.clearMemory();
-        		machine.setPagingTable();
-    	    }*/
+        		cpu.clearRegisters();
+        		clearMemory();
+        		setPagingTable();
+    	    }
     		int counter = 0;
     		boolean run = true;
     		RM.currentProgram(programsNames[i]);

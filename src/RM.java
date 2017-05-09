@@ -436,35 +436,39 @@ public class RM {
 		}
 	}
 	public static void printRegisters(CPU cpu){
-		textAX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[0])).toUpperCase() + 
-			Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[1])).toUpperCase() + 
-			Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[2])).toUpperCase() + 
+		textAX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[0])).toUpperCase() + "|" +
+			Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[1])).toUpperCase() + "|" +
+			Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[2])).toUpperCase() + "|" +
 			Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[3])).toUpperCase());
-		/*
-		textBX.setText(Integer.toHexString(Machine.unsignedToBytes(Machine.BX[0])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.BX[1])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.BX[2])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.BX[3])).toUpperCase());
-		textPLR.setText(Integer.toHexString(Machine.unsignedToBytes(Machine.PLR[0])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.PLR[1])).toUpperCase() + 
-				Integer.toHexString(Machine.PLR[2]*10 + Machine.PLR[3]).toUpperCase());
-		textIC.setText((Integer.toHexString(Machine.IC[0]).toUpperCase()) + " " + 
-	        	Integer.toHexString(Machine.IC[1]).toUpperCase());
-		if(Machine.C == 0){
+		
+		textBX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[0])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[1])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[2])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[3])).toUpperCase());
+		
+		textPLR.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getPLR()[0])).toUpperCase() + 
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getPLR()[1])).toUpperCase() + 
+				Integer.toHexString(cpu.getPLR()[2]*10 + cpu.getPLR()[3]).toUpperCase());
+		textIC.setText((Integer.toHexString(cpu.getIC()[0]).toUpperCase()) + "|" + 
+	        	Integer.toHexString(cpu.getIC()[1]).toUpperCase());
+		
+		if(cpu.getC() == 0){
 			textC.setText("FALSE");
 		}else{
 			textC.setText("TRUE");
 		}
-		textPI.setText(Integer.toString(Machine.PI));
-		textSI.setText(Integer.toString(Machine.SI));
-		textTI.setText(Integer.toString(Machine.TI));
+		textPI.setText(Integer.toString(cpu.getPI()));
+		textSI.setText(Integer.toString(cpu.getSI()));
+		textTI.setText(Integer.toString(cpu.getTI()));
 		
-	    //skaiciuojame realiuoje atmintyje kodo ir duomenu segmentu adresus
-		int segment = Machine.realAddress(Machine.CS[0], Machine.CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE ;;
-		textCS.setText(Integer.toHexString(segment).toUpperCase()+"0");
-		segment = Machine.realAddress(Machine.DS[0], Machine.CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE ;
-		textDS.setText(Integer.toHexString(segment).toUpperCase()+"0");
-		*/
+	    //skaiciuojame realioje atmintyje kodo ir duomenu segmentu adresus
+		byte CS[] = cpu.getCS();
+		byte DS[] = cpu.getDS();
+		int segment = Machine.realAddress(CS[0], CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE;
+		textCS.setText(Integer.toHexString(segment).toUpperCase() + "|0");
+		segment = Machine.realAddress(DS[0], CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE ;
+		textDS.setText(Integer.toHexString(segment).toUpperCase() + "|0");
+		
 	}
 	public static void setProcessTable(int row, String procName, int procPrior, String procState){
 		table.setValueAt(procName, row, 0);
