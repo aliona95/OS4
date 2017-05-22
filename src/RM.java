@@ -1,3 +1,4 @@
+package os;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Label;
@@ -388,25 +389,7 @@ public class RM {
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	if(Machine.programsNum == 0){ //gali prireikti sito if!!!!!			
-		    	}
 		    	
-		    	byte PLR[] = {0, 15, 6, 1}; //pradine puslapiu lenteles reiksme
-		    	byte MODE = 1; // reiskia supervizoriaus rezima
-		    	CPU cpu = new CPU(MODE, PLR);
-		    
-		    	// nuskaitome irasytas programas
-		        //fileSystem = txt.getText();
-		    	fileSystem = "failas.txt";
-		        programsNum = 0;
-				try {
-					Machine.fileSystem = fileSystem;
-				    Thread t = new Thread(new Machine(cpu));
-				    t.start();
-				} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-				}
 		    }
 		});
 		System.out.println(panel.getComponentCount());
@@ -415,7 +398,7 @@ public class RM {
 		frmMm.setBounds(0, 0, 827, 717);
 		frmMm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	public static void printMemory(){
+/*	public static void printMemory(){
 		String memory = "";
 		int counter = 0;
 		for(int row = 1; row < 65; row++){ 
@@ -434,8 +417,9 @@ public class RM {
 				memory = "";
 			}
 		}
-	}
+	}*/
 	public static void printRegisters(CPU cpu){
+		/*
 		textAX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[0])).toUpperCase() + "|" +
 				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[1])).toUpperCase() + "|" +
 				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[2])).toUpperCase() + "|" +
@@ -468,6 +452,7 @@ public class RM {
 			textCS.setText(Integer.toHexString(segment).toUpperCase() + "|0");
 			segment = Machine.realAddress(DS[0], CS[1]) / Machine.BLOCK_SIZE / Machine.WORD_SIZE ;
 	textDS.setText(Integer.toHexString(segment).toUpperCase() + "|0");
+	*/
 	}
 	public static void setProcessTable(int row, String procName, int procPrior, String procState){
 		table.setValueAt(procName, row, 0);
