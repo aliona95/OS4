@@ -22,6 +22,7 @@ public class OS {
 	
 	// realios masinos atmintis
 	public static byte memory[] = new byte[BLOCKS * BLOCK_SIZE * WORD_SIZE];
+	public static byte externalMemory[] = new byte[BLOCKS * BLOCK_SIZE * WORD_SIZE];
 	
 	public static int blockedProcessId = -1; 
     
@@ -47,9 +48,21 @@ public class OS {
             pa.addPa(i, info);
         }
         
-        OS.kernel.kurtiResursa(true, pa, adr, "OPERATYVIOJI_ATMINTIS");
-	}
-	
+        OS.kernel.kurtiResursa(true, pa, adr, "VARTOTOJO_SASAJA");
+        OS.kernel.kurtiResursa(true, pa, adr, "Isorine atmintis");
+        OS.kernel.kurtiResursa(true, pa, adr, "Supervizorine atmintis");
+        OS.kernel.kurtiResursa(true, pa, adr, "Vartotojo atmintis");
+     
+        
+        pa = new ArrList();
+        pa.addPa(1, info);
+        OS.kernel.kurtiResursa(true, pa, adr, "DARBO_PABAIGA");
+        
+        
+        
+        pa = new ArrList();
+        pa.addPa(1, info);
+    }
 	public static void cpu(){
         executeCommand(); 
         //OSgui.refreshRegisterFields();
@@ -80,11 +93,15 @@ public class OS {
                 int proc = OS.kernel.getProcDesc().getProcessName();
                 proc = OS.kernel.findProc(proc, OS.processDesc);
                 String name = OS.processDesc.get(proc).getName();
-                System.out.println("Procesas " + name);
-                System.out.println("Command counter:" + counter);
+                //System.out.println("Procesas " + name);
+                //System.out.println("Command counter:" + counter);
                 switch(name){
                     case "StartStop":
                         startStop(Integer.valueOf(line));
+                        break;
+                    case "ReadFromInterface":
+                    	System.out.println("AS CIA");
+                    	readFromInterface(Integer.valueOf(line));
                         break;
                     default:
                     {
@@ -241,13 +258,27 @@ public class OS {
                 rmMemory[ic].cell = "0";
                 rmMemory[0].cell = "6";
                 */
+                int res = OS.kernel.findResName("DARBO_PABAIGA", OS.resourseDesc);
+                OS.kernel.prasytiResurso(res, 1);
                 break;
         }
     }
     
-    
-    
-	
+    public static void readFromInterface(int line){
+    	System.out.println("AS CIA");
+    	 switch(line){
+    	 	case 0:
+    	 		System.out.println("AS CIA");
+    	 		int res = OS.kernel.findResName("VARTOTOJO_SASAJA", OS.resourseDesc);
+    	 		OS.kernel.prasytiResurso(res, 1);
+              //  OS.rmMemory[1].cell = "1";
+    	 		counter++;
+    	 	break;
+    	 		
+    	 }
+    		
+    	
+    }
 	public static void main(String args []){
 		 rm = new RM();
 		 rm.main();
@@ -256,7 +287,8 @@ public class OS {
 	            System.out.println("resurso vardas: " + OS.resourseDesc.get(i).getName());
 	            System.out.println("prieinamu resursu : " + OS.resourseDesc.get(i).getPrieinamu_resursu_sarasas().getSize());
 	     }
-		 int id = OS.kernel.findResName("OPERATYVIOJI_ATMINTIS", resourseDesc);
+		
+		 int id = OS.kernel.findResName("Vartotojo atmintis", resourseDesc);
 	     int index = OS.kernel.findRes(id, resourseDesc);
 	     for(int i = 0; i < 10; i ++){
 	    	 OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getList().remove(0);

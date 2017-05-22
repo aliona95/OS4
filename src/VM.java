@@ -365,28 +365,26 @@ public class VM extends Thread{
     	}
 	}
 	public static void printRegisters(CPU cpu){
-		/*
-		textAX.setText(Integer.toHexString(Machine.unsignedToBytes(Machine.AX[0])).toUpperCase() + 
-			Integer.toHexString(Machine.unsignedToBytes(Machine.AX[1])).toUpperCase() + 
-			Integer.toHexString(Machine.unsignedToBytes(Machine.AX[2])).toUpperCase() + 
-			Integer.toHexString(Machine.unsignedToBytes(Machine.AX[3])).toUpperCase());
-		textBX.setText(Integer.toHexString(Machine.unsignedToBytes(Machine.BX[0])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.BX[1])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.BX[2])).toUpperCase() + 
-				Integer.toHexString(Machine.unsignedToBytes(Machine.BX[3])).toUpperCase());
-		textSF.setText(Integer.toHexString(Machine.unsignedToBytes(Machine.SF)).toUpperCase());
-		textIC.setText((Integer.toHexString(Machine.IC[0]).toUpperCase()) + " " + 
-	        	Integer.toHexString(Machine.IC[1]).toUpperCase());
-	    textDS.setText((Integer.toHexString(Machine.DS[0]).toUpperCase()) + 
-	        	Integer.toHexString(Machine.DS[1]).toUpperCase());
-	    textCS.setText((Integer.toHexString(Machine.CS[0]).toUpperCase()) + 
-	        	Integer.toHexString(Machine.CS[1]).toUpperCase());
-		if(Machine.C == 0){
-			textC.setText("FALSE");
-		}else{
-			textC.setText("TRUE");
-		}
-		*/
+		textAX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[0])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[1])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[2])).toUpperCase() + "|" +
+				Integer.toHexString(Machine.unsignedToBytes(cpu.getAX()[3])).toUpperCase());
+			
+			textBX.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[0])).toUpperCase() + "|" +
+					Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[1])).toUpperCase() + "|" +
+					Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[2])).toUpperCase() + "|" +
+					Integer.toHexString(Machine.unsignedToBytes(cpu.getBX()[3])).toUpperCase());
+			
+			textSF.setText(Integer.toHexString(Machine.unsignedToBytes(cpu.getSF())).toUpperCase());
+			
+			textIC.setText((Integer.toHexString(cpu.getIC()[0]).toUpperCase()) + "|" + 
+		        	Integer.toHexString(cpu.getIC()[1]).toUpperCase());
+			
+			if(cpu.getC() == 0){
+				textC.setText("FALSE");
+			}else{
+				textC.setText("TRUE");
+            }
 	}
 	public int getMode(){
 		return mode;
@@ -410,6 +408,9 @@ public class VM extends Thread{
         	java.awt.Component  cellComponent = super.getTableCellRendererComponent(table, value, 
         		isSelected, hasFocus, row, column);
         	if(Machine.isJump){
+        		//CPU.CC[0]++;
+        		CPU.CC[0]++;
+        		System.out.println("Ciklo skaitliukas " + CPU.CC[0]);
         		VM.setVmColumn(Machine.jumpToColumn);
         		VM.setVmRow(Machine.jumpToRow);
         		setBackground((row == VM.getVmRow() + 1) && (column == VM.getVmColumn() + 1) ? Color.lightGray : new Color(255, 215, 0));
@@ -418,8 +419,10 @@ public class VM extends Thread{
         	}else{
         		setBackground((row == VM.getVmRow() + 1) && (column == VM.getVmColumn()) ? Color.lightGray : new Color(255, 215, 0));
         	}
+        	/*
         	System.out.println("VM ROW = " + VM.getVmRow());
         	System.out.println("VM COLUMN = " + VM.getVmColumn());
+        	*/
         	return cellComponent;
         }
 	}    

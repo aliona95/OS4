@@ -1,8 +1,12 @@
 import java.util.ArrayList;
 
+
+
 public class Kernel {
 	private ProcessorDeskriptor procDesc = new ProcessorDeskriptor(); 
 	private ArrList pps = new ArrList();
+	private ArrayList<Integer> aptarnautiProcesai = new ArrayList<>();
+    private int aptarnautuProcesuSkaicius = 0;
 	
 	public void createProcess(ArrList memory, ArrList resource, int priority,CPU cpu, String name){
 		// Veiklumo aprasas (procesu deskriptorius)
@@ -60,10 +64,11 @@ public class Kernel {
         OS.processDesc.get(index).setCreatedResourses(old);
         OS.resourseDesc.add(resDesc);
         //System.out.println("-----------------");
+        /*
         for(int i = 0; i < OS.resourseDesc.size(); i++){
            System.out.println("vardas: " + OS.resourseDesc.get(i).getName());
            //System.out.println("sisteminiai procesai prieinamu procesu saraso dydis: " + OS.resourseDesc.get(i).getPrieinamu_resursu_sarasas().getSize());
-        }
+        }*/
         //System.out.println("paskutinis elementas : " + OS.resourseDesc.get(OS.resourseDesc.size()-1).getPrieinamu_resursu_sarasas().getSize());
     }
     
@@ -158,6 +163,61 @@ public class Kernel {
             OS.kernel.procDesc.setProcessName(OS.processDesc.get(next_process1).getId());
         } 
     }
+    public void prasytiResurso(int resourse, int part)
+    {
+        /*int proc_id = OS.kernel.getProcDesc().getProcessName();
+        int proc_ind = OS.kernel.findProc(proc_id, OS.processDesc);
+        OS.processDesc.get(proc_ind).setState("BLOCKED");*/
+        int index = OS.kernel.findRes(resourse, OS.resourseDesc);
+        ArrList old = OS.resourseDesc.get(index).getLaukianciu_procesu_sarasas();
+        int id = OS.kernel.procDesc.getProcessName();
+        id = OS.kernel.findProc(id, OS.processDesc);
+        int prior = OS.processDesc.get(id).getPriority();
+        String info = "";
+        old.addLps(OS.processDesc.get(id).getId(), part, info, prior);
+        OS.resourseDesc.get(index).setLaukianciu_procesu_sarasas(old);
+        aptarnautiProcesai = new ArrayList<>();
+        aptarnautuProcesuSkaicius = 0;
+        paskirstytojas(resourse);
+        boolean einamas = true;
+        for(int i = 0; i < aptarnautuProcesuSkaicius; i++)
+        {
+            if(aptarnautiProcesai.get(i) != OS.kernel.procDesc.getProcessName())
+            {
+                int processName = aptarnautiProcesai.get(i);
+                int index1 = OS.kernel.findProc(processName, OS.processDesc);
+                OS.kernel.pps.addPps(processName, OS.processDesc.get(index1).getPriority());
+                OS.processDesc.get(index1).setListWhereProcessIs(-1);
+                String state = OS.processDesc.get(index1).getState();
+                if (state.equals("BLOCKED"))
+                {
+                    OS.processDesc.get(index1).setState("READY");
+                }
+                else
+                {
+                    OS.processDesc.get(index1).setState("READYS");
+                }
+            }
+            else
+            {
+                einamas = false;
+            }
+        }
+        if(einamas)
+        {
+            OS.processDesc.get(id).setState("BLOCKED");
+            OS.processDesc.get(id).setListWhereProcessIs(resourse);
+            //OS.kernel.procDesc.setProcessName(-1);
+            //OS.kernel.pps.remove(id);
+        }
+        OS.kernel.planuotojas();
+    }
+    
+    public void paskirstytojas(int r){
+      
+    }
+    
+    
     
     public ProcessorDeskriptor getProcDesc(){
         return procDesc;

@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  *  
  */
 public class Machine implements Runnable{
-	private CPU cpu;
+	private static CPU cpu;
 	public final static int WORD_SIZE = 4;
 	public final static int BLOCK_SIZE = 16;
 	public final static int USER_BLOCKS = 48;
@@ -128,7 +128,7 @@ public class Machine implements Runnable{
     		memory[address + i] = (byte) command.charAt(i); 
     	}
     }
-    public int realAddress(int x, int y) {
+    public static int realAddress(int x, int y) {
     	byte PLR[] = cpu.getPLR();
 		int pagingTableAddr = (((int) PLR[2]) * 10 + (int) PLR[3]) * BLOCK_SIZE * WORD_SIZE;
 		//System.out.println("PAGING TABLE ADDRESS " + pagingTableAddr);
@@ -446,15 +446,15 @@ public class Machine implements Runnable{
     		System.out.println("Perpildymas");
     	}
     	String hexSum = Long.toHexString(sum).toUpperCase();
-    	
-    	
-    	///////////////////////////////////////////////////////////////////////////
-    	if(hexSum.length() == 8){
-    		for(int i = 0; i < WORD_SIZE; i++){
-    			String hex = hexSum.substring(i * 2, (i * 2) + 2);
-    			System.out.println(Integer.parseInt(hex, 16));
-    			AX[i] = (byte) Integer.parseInt(hex, 16);
-    		}
+  
+    	while(hexSum.length() != 8){
+    		hexSum = "0" + hexSum; 
+    	}
+        //if(hexSum.length() == 8){
+    	for(int i = 0; i < WORD_SIZE; i++){
+    		String hex = hexSum.substring(i * 2, (i * 2) + 2);
+       		System.out.println(Integer.parseInt(hex, 16));
+   			AX[i] = (byte) Integer.parseInt(hex, 16);
     	}
     	cpu.setAX(AX);
     }
@@ -489,14 +489,14 @@ public class Machine implements Runnable{
     	}
     	String hexSum = Long.toHexString(sum).toUpperCase();
     	
-    	
-    	///////////////////////////////////////////////////////////////////////////
-    	if(hexSum.length() == 8){
-    		for(int i = 0; i < WORD_SIZE; i++){
-    			String hex = hexSum.substring(i * 2, (i * 2) + 2);
-    			System.out.println(Integer.parseInt(hex, 16));
-    			BX[i] = (byte) Integer.parseInt(hex, 16);
-    		}
+    	while(hexSum.length() != 8){
+    		hexSum = "0" + hexSum; 
+    	}
+        //if(hexSum.length() == 8){
+    	for(int i = 0; i < WORD_SIZE; i++){
+    		String hex = hexSum.substring(i * 2, (i * 2) + 2);
+       		System.out.println(Integer.parseInt(hex, 16));
+   			BX[i] = (byte) Integer.parseInt(hex, 16);
     	}
     	cpu.setBX(BX);
     }
@@ -508,11 +508,26 @@ public class Machine implements Runnable{
     	int correct = 0;
     	byte AX[] = cpu.getAX();
     	System.out.println("CPU GETA AX " + cpu.getAX()[0]);
-    	for(int i = 0; i < WORD_SIZE; i++){
-    		if(AX[i] == memory[address + i]){
-    			correct++;
+    	int counter = 0;
+    	for(int j = 0; j < WORD_SIZE; j++){
+    		if(AX[j] == 0){
+    			counter++;
     		}
     	}
+    	if(counter == 3){
+    		for(int i = 0; i < WORD_SIZE; i++){
+        		if(AX[i] == memory[address + i] - 48){ ///!!!!!!!!!!!!!!
+        			correct++;
+        		}
+        	}
+    	}else{
+    		for(int i = 0; i < WORD_SIZE; i++){
+        		if(AX[i] == memory[address + i]){ ///!!!!!!!!!!!!!!
+        			correct++;
+        		}
+        	}
+    	}
+    	
     	if (correct == WORD_SIZE){
     		setC();
     		setZF();

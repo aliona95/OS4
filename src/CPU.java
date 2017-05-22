@@ -16,7 +16,7 @@ public class CPU {
     private byte TI = 10;
     private  byte CS [] = {0,0};
     private byte DS [] = {0,0};
-    
+    static byte CC[] = {0,0};
 	CPU(byte MODE, byte PLR[]){
 		this.setPLR(PLR);
 		this.setMODE(MODE);

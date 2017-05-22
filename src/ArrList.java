@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 // laukianciu procesu sarasas
 
+
 public class ArrList{
 	
 	private ArrayList<Struct> list = new ArrayList<Struct>();
@@ -10,6 +11,14 @@ public class ArrList{
 		return list;
 	}
 	
+	public void addLps( int id, int res, String info, int prior ){
+        Struct struct = new Struct();
+        struct.processId = id;
+        struct.partOfResource = res;
+        struct.priority = prior;
+        list.add(struct);
+        Collections.sort(list);
+    }
 	public void myCopy(ArrayList copy){
         this.list = new ArrayList(copy);
     }
