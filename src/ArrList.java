@@ -6,13 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-/**
- *
- * @author eimantas
- */
-
 /*
-    Laukiančių procesų sąrašas
+    LaukianÄ�iÅ³ procesÅ³ sÄ…raÅ¡as
 */
 public class ArrList {
         

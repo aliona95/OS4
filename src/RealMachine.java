@@ -1,9 +1,5 @@
 package os;
 
-/**
- *
- * @author eimantas
- */
 public class RealMachine {
     
     private String registerR;

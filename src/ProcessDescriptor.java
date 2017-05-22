@@ -2,11 +2,6 @@ package os;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-/**
- *
- * @author eimantas
- */
 public class ProcessDescriptor {
     
     private static int process_id_counter = 0; 

@@ -12,10 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author eimantas
- */
+
 public class GUI extends javax.swing.JFrame {
 
     /**
