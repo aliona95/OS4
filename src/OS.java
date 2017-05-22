@@ -195,22 +195,21 @@ public class OS {
                         break;
                     }
                     case "MainProc": {
-                        outpuData(Integer.valueOf(line));
+                        mainProc(Integer.valueOf(line));
                         break;
                     }
                     case "Loader":
                     {
-                        additionalMemory(Integer.valueOf(line));
+                        loader(Integer.valueOf(line));
                         break;
                     }
-                    case "Interrupt":
-                    {
+                    case "Interrupt": {
                         mainProc(Integer.valueOf(line));
                         break;
                     }
                     case "PrintLine":
                     {
-                        loader(Integer.valueOf(line));
+                        printLine(Integer.valueOf(line));
                         break;
                     }
                     
@@ -325,6 +324,23 @@ public class OS {
         pa = new ArrList();
         //pa.addPa(1);
         OS.kernel.kurtiResursa(false, pa, adr, "UzduotiesVykdymoParametraiSupAtm");
+        
+        pa = new ArrList();
+        //pa.addPa(1);
+        OS.kernel.kurtiResursa(false, pa, adr, "PakrovimoPaketas");
+        
+        pa = new ArrList();
+        //pa.addPa(1);
+        OS.kernel.kurtiResursa(false, pa, adr, "Pertraukimas");
+        
+        pa = new ArrList();
+        //pa.addPa(1);
+        OS.kernel.kurtiResursa(false, pa, adr, "EiluteAtmintyje");
+        
+        
+        pa = new ArrList();
+        //pa.addPa(1);
+        OS.kernel.kurtiResursa(false, pa, adr, "UzduotisBugne");
         
         for(int i = 0; i < OS.rmMemory.length / 10; i++){
             pa.addPa(i, info);
@@ -609,378 +625,55 @@ public class OS {
         
         
     }
-    public static void outpuData(int line)
-    {
-        switch(line)
-        {
-            case 0:
-            {
-                String res = "OUTPUT_DATA";
+    public static void mainProc(int line){
+        switch(line){
+            case 0:{
+                String res = "UzduotisBugne";
                 int id = OS.kernel.findResName(res, resourseDesc);
                 OS.kernel.prasytiResurso(id, 1);
                 OS.rmMemory[4].cell = "1";
                 break;
             }
-            case 1:
-            {
-                String res = "ISVEDIMO_IRENGINYS";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.prasytiResurso(id, 1);
-                OS.rmMemory[4].cell = "2";
-                break;
-            }
-            case 2:
-            {
-                //xchng
-                int registerR = Integer.valueOf(outputDataStrings.get(0));
-                int wordCount = registerR / 100;
-                int adr = registerR % 100;
-                int oldPtr = OS.realMachine.getRegisterPTR();
-                OS.realMachine.setRegisterPTR(outputDataPtr.get(0));
-                for(int i = 0; i < wordCount; i++)
-                {
-                    int adrr = OS.paging.getRMadress(adr + 1);
-                    String s = rmMemory[adrr].getCell();
-                    outputStream.add(s);                        
-                }
-                outputDataPtr.remove(0);
-                outputDataStrings.remove(0);
-                
-                OS.rmMemory[4].cell = "3";
-                break;
-            }
-            case 3:
-            {
-                String res = "ISVEDIMO_IRENGINYS";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                int proc = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.atlaisvintiResursa(id, 1, proc, "");
-                OS.rmMemory[4].cell = "4";
-                break;
-            }
-            case 4:
-            {
-                String res = "OUTPUT_DATA";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                int proc = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.atlaisvintiResursa(id, 1, proc, "");
-                OS.rmMemory[4].cell = "5";
-                break;
-            }
-            case 5:
-            {
-                String res = "OUTPUT_DATA_END";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.aktyvuotiR(id, 1, "");
-                OS.rmMemory[4].cell = "6";
-                break;
-            }
-            case 6:
-            {
-                int id = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.stopProc(id);
-                OS.rmMemory[4].cell = "7";
-                break;  
-            }
-            case 7:
-            {
-                String res = "OUTPUT_DATA_END";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.deaktyvuotiR(id);
-                OS.rmMemory[4].cell = "0";
-                break;
-            }   
         }
     }
     
-    public static void additionalMemory(int line)
-    {
-        switch(line)
-        {
-            case 0:
-            {
-                String res = "ASK_MEMORY";
+    public static void loader(int line){
+        switch(line){
+            case 0:{
+                String res = "PakrovimoPaketas";
                 int id = OS.kernel.findResName(res, resourseDesc);
                 OS.kernel.prasytiResurso(id, 1);
                 OS.rmMemory[5].cell = "1";
                 break;
             }            
-            case 1:
-            {
-                int registerR = Integer.valueOf(askMemoryR.get(0));
-                int registerPtr = askMemoryPtr.get(0);
-                int ptrSize = registerPtr - registerPtr%100;
-                if(ptrSize / 100 + 1 - registerR > 0) 
-                {
-                    askMemorySize = ptrSize / 100 + 1 - registerR;
-                    OS.rmMemory[5].cell = "2";
-                }else OS.rmMemory[5].cell = "6";
-                
-                break;
-            }
-            case 2:
-            {
-                int res = OS.kernel.findResName("OPERATYVIOJI_ATMINTIS", OS.resourseDesc);
-                OS.kernel.prasytiResurso(res, askMemorySize);
-                OS.rmMemory[5].cell = "3";
-                break;
-            }
-            case 3:
-            {
-                //atminties priskyrimas virtualiai masinai
-                int idp = OS.kernel.getProcDesc().getProcessName();
-                int index = OS.kernel.findProc(idp, processDesc);
-                int indexVm = OS.kernel.findProc(askMemoryVmId.get(0), processDesc);
-                ArrList vmMem = OS.processDesc.get(indexVm).getOperating_memory();
-                int res = OS.kernel.findResName("OPERATYVIOJI_ATMINTIS", resourseDesc);
-                for(int i = 0; i < OS.processDesc.get(index).getOperating_memory().getSize(); i++)
-                {
-                    vmMem.addOa(res, OS.processDesc.get(index).getOperating_memory().getList().get(i).part_of_resourse);
-                }
-                OS.processDesc.get(indexVm).setOperating_memory(vmMem);
-                int ptr = askMemoryPtr.get(0);
-                int newPtr = ptr + askMemorySize * 100;
-                int ptrAdr = ptr % 100;
-                int oldSize = ptr - ptrAdr;
-                oldSize = oldSize / 100 + 1;
-                for(int i = 0; i < askMemorySize; i++)
-                {
-                    OS.rmMemory[ptrAdr * 10 + oldSize + i].setCell(String.valueOf(OS.processDesc.get(index).getOperating_memory().getList().get(i).part_of_resourse));
-                    OS.rmMemory[ptrAdr * 10 + oldSize + i].setState(true);
-                }
-                OS.processDesc.get(indexVm).getCpu2().setRegisterPTR(newPtr);
-                askMemoryPtr.remove(0);
-                askMemoryR.remove(0);
-                askMemorySize = 0;
-                askMemoryVmId.remove(0);
-                OS.rmMemory[5].cell = "4";
-                break;
-            }
-            case 4:
-            {
-                int res = OS.kernel.findResName("MEMORY_GIVEN", resourseDesc);
-                OS.kernel.aktyvuotiR(res, 1, "MEMORY_GIVEN");
-                OS.rmMemory[5].cell = "5";
-                break;
-            }
-            case 5:
-            {
-                int id = OS.kernel.findResName("ASK_MEMORY", resourseDesc);
-                int proc = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.atlaisvintiResursa(id, 1, proc, "");
-                OS.rmMemory[5].cell = "7";
-                break;
-            }
-            case 6:
-            {
-                int res = OS.kernel.findResName("MEMORY_GIVEN", resourseDesc);
-                OS.kernel.aktyvuotiR(res, 1, "MEMORY_NOT_GIVEN");
-                OS.rmMemory[5].cell = "5";
-                break;
-            }
-            case 7:
-            {
-                int id = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.stopProc(id);
-                OS.rmMemory[5].cell = "8";
-                break;
-            }
-            case 8:
-            {
-                int res = OS.kernel.findResName("MEMORY_GIVEN", resourseDesc);
-                OS.kernel.deaktyvuotiR(res);
-                OS.rmMemory[5].cell = "0";
-                break;
-            }
         }
     }
-   public static void mainProc(int line)
-    {
-        //String info = "";
-        switch(line)
-        {
-            case 0:
-            {
-                String res = "UZDUOTIS_ISORINEJE_ATMINTYJE";
+    
+    public static void interupt(int line){
+        switch(line){
+            case 0:{
+                String res = "Petraukimas";
                 int id = OS.kernel.findResName(res, resourseDesc);
                 OS.kernel.prasytiResurso(id, 1);
                 OS.rmMemory[6].cell = "1";
                 break;
-            }
-            case 1:
-            {
-                int id = OS.kernel.getProcDesc().getProcessName();
-                int index = OS.kernel.findProc(id, processDesc);
-                if(OS.processDesc.get(index).getInfo().equals("FIKTYVUS_RESURSAS")){
-                    OS.rmMemory[6].cell = "2";
-                    break;
-                } else {
-                    OS.rmMemory[6].cell = "3";
-                    break;
-                }
-            }
-            case 2:
-            {
-                // naikinti job governor sukurusi fiktyvu resursa
-                int id = OS.kernel.getProcDesc().getProcessName();
-                int index = OS.kernel.findProc(id, processDesc);
-                int procId = OS.processDesc.get(index).getResource().getList().get(0).processId;
-                OS.kernel.abortProcess(procId);
-                OS.processDesc.get(index).getResource().getList().remove(0);
-                OS.rmMemory[6].cell = "0";
-                break;
-            }
-            case 3:
-            {
-                // SUKURTI JOB GOVERNOR
-                int id = OS.kernel.getProcDesc().getProcessName();
-                int index = OS.kernel.findProc(id, processDesc);
-                int ic = governorIc;
-                governorIc++;
-                if(governorIc == 20)
-                {
-                    governorIc = 10;
-                }
-                ArrList memory = new ArrList();
-                ArrList resource = new ArrList();
-                
-                int resId = OS.kernel.findResName("ISORINE_ATMINTIS", resourseDesc);
-                for(int i = 0; i < OS.uzduotisIsorinejeAtmintyje.get(0).size(); i++)
-                {
-                    System.out.println("os.OS.mainProc()" + OS.uzduotisIsorinejeAtmintyje.get(0).get(i));
-                    resource.addR(id, OS.uzduotisIsorinejeAtmintyje.get(0).get(i), "");
-                }
-                OS.uzduotisIsorinejeAtmintyje.remove(0);
-                //resource = OS.uzduotisIsorinejeAtmintyje.get(0);
-                //resource.myCopy(OS.processDesc.get(index).getResource().getList());
-                
-                System.out.println("resursai kurie turetu buti proskirti!!!! : " + resource.getSize() );
-                CPU cpu = new CPU(false, 0, ic);
-                int priority = 3;
-                OS.kernel.createProcess(memory, resource, priority, cpu, "JOB_GOVERNOR");
-                //OS.processDesc.get(index).setResource(new ArrList());
-                rmMemory[ic].cell = "0";
-                //rmMemory[0].cell = "2";
-                //break;
-                // perduoti UZDUOTIS_ISORINEJE_ATMINTYJE
-                OS.rmMemory[6].cell = "4";
-                break;
-            }
-            case 4:
-            {
-                String res = "UZDUOTIS_PAIMTA";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.prasytiResurso(id, 1);
-                OS.rmMemory[6].cell = "5";
-                break;
-            }
-            case 5:
-            {
-                String res = "UZDUOTIS_ISORINEJE_ATMINTYJE";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.deaktyvuotiR(id);
-                OS.rmMemory[6].cell = "6";
-                break;
-            }
-            case 6:
-            {
-                String res = "UZDUOTIS_PAIMTA";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                int proc = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.atlaisvintiResursa(id, 1, proc, "");
-                OS.rmMemory[6].cell = "7";
-                break;
-            }
-            case 7:
-            {
-                //aktyvuoti JOB GOVERNOR
-                //int index = OS.kernel.findProc(governotId, processDesc);
-                OS.kernel.acivateProc(governorId);
-                OS.rmMemory[6].cell = "0";
-                break;
-            }
+            }            
         }
     }
-    
-    public static void loader(int line)
-    {
-        switch(line)
-        {
-            case 0:
-            {
-                String res = "PAKROVIMO_PAKETAS";
+    public static void printLine(int line){
+        switch(line){
+            case 0:{
+                String res = "EiluteAtmintyje";
                 int id = OS.kernel.findResName(res, resourseDesc);
                 OS.kernel.prasytiResurso(id, 1);
                 OS.rmMemory[7].cell = "1";
                 break;
-            }
-            case 1:
-            {
-                String res = "ISORINIS_ATMINTIES_IRENGINYS";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.prasytiResurso(id, 1);
-                OS.rmMemory[7].cell = "2";
-                break;
-            }
-            case 2:
-            {
-                //XCHNG
-                for(int i = 0; i < loaderOpreatingBlocks.get(0).size(); i++)
-                {
-                    rmMemory[vmIc + i].setCell(String.valueOf(loaderOpreatingBlocks.get(0).get(i)));
-                }
-                int ptr = 9*100+vmIc;
-                governorPtr = ptr;
-                System.out.println("isorines atminties: " + loaderExternalBlocks.get(0).size());
-                System.out.println("operatyvios atminties: " + loaderOpreatingBlocks.get(0).size());
-                for(int i = 0; i  < 10; i++)
-                {
-                    int externalBlock = loaderExternalBlocks.get(0).get(i);
-                    int operatingBlock = loaderOpreatingBlocks.get(0).get(i);
-                    for(int j = 0; j < 10; j++)
-                    {
-                        rmMemory[operatingBlock *10 + j].setCell(externalMemory[externalBlock *10 + j].cell);
-                        externalMemory[externalBlock *10 + j].freeCell();
-                    }
-                }
-                loaderExternalBlocks.remove(0);
-                loaderOpreatingBlocks.remove(0);
-                OS.rmMemory[7].cell = "3";
-                break;
-            }
-            case 3:
-            {
-                String res = "ISORINIS_ATMINTIES_IRENGINYS";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                int proc = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.atlaisvintiResursa(id, 1, proc, "");
-                OS.rmMemory[7].cell = "4";
-                break;
-            }
-            case 4:
-            {
-                int res = OS.kernel.findResName("LOADER_END", resourseDesc);
-                OS.kernel.aktyvuotiR(res, 1, "");
-                OS.rmMemory[7].cell = "5";
-                break;
-            }
-            case 5:
-            {
-                int id = OS.kernel.getProcDesc().getProcessName();
-                OS.kernel.stopProc(id);
-                OS.rmMemory[7].cell = "6";
-                break;
-            }
-            case 6:
-            {
-                String res = "LOADER_END";
-                int id = OS.kernel.findResName(res, resourseDesc);
-                OS.kernel.deaktyvuotiR(id);
-                OS.rmMemory[7].cell = "0";
-                break;
-            }       
+            }            
         }
     }
+    
+    
+    
     
     
     public static void idle(int line)
