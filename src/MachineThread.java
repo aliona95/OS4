@@ -11,10 +11,7 @@ public class MachineThread extends Thread
         //boolean kk = false;
         while(!OS.osEnd)
         {
-            if(OS.startInput)
-            {
-                
-                
+            if(OS.startInput){   
                 InputThread inputThread = new InputThread();
                 inputThread.start();
                 
