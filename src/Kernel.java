@@ -1,8 +1,17 @@
-package os;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ *
+ * @author Algirdas
+ */
 public class Kernel
 {
     //private ArrayList<Integer> allProcess = new ArrayList<>();
@@ -29,27 +38,27 @@ public class Kernel
                 int next_process1 = OS.kernel.findProc(next_process, OS.processDesc);
                 System.out.println("SEKANCIO, jei einamas buvo readys, PROCESO_NUMERIS = " + next_process1);
                 System.out.println("SEKANCIO, jei einamas buvo readys, PROCESO_VARDAS = " + OS.processDesc.get(next_process1).getName());
-                OS.processDesc.get(next_process1).getCpu();
+               // OS.processDesc.get(next_process1).getCpu();
                 //OS.processDesc.get(next_process1).setState("RUN");
                 OS.kernel.procDesc.setProcessName(OS.processDesc.get(next_process1).getId());
             }else
             {
                 OS.processDesc.get(index).setState("READY");
-                OS.processDesc.get(index).setCPU();
+              //  OS.processDesc.get(index).setCPU();
                 OS.kernel.pps.addPps(OS.processDesc.get(index).getId(), OS.processDesc.get(index).getPriority());
                 int next_process = OS.kernel.pps.removeFirst();
                 int next_process1 = OS.kernel.findProc(next_process, OS.processDesc);
                 System.out.println("SEKANCIO, jei einamas buvo ready, PROCESO_NUMERIS = " + next_process1);
                 System.out.println("SEKANCIO, jei einamas buvo ready, PROCESO_VARDAS = " + OS.processDesc.get(next_process1).getName());
-                OS.processDesc.get(next_process1).getCpu();
-                System.out.println("IC = " + OS.realMachine.getRegisterIC());
+              //  OS.processDesc.get(next_process1).getCpu();
+               // System.out.println("IC = " + OS.realMachine.getRegisterIC());
                 OS.processDesc.get(next_process1).setState("RUN");
                 OS.kernel.procDesc.setProcessName(OS.processDesc.get(next_process1).getId());
             }
         }else
         {
             //OS.processDesc.get(index).setState("READY");
-            OS.processDesc.get(index).setCPU();
+          //  OS.processDesc.get(index).setCPU();
             //OS.kernel.pps.addPps(processNumber, OS.processDesc.get(processNumber).getPriority());
             int next_process = OS.kernel.pps.removeFirst();
             int next_process1 = OS.kernel.findProc(next_process, OS.processDesc);
@@ -60,108 +69,17 @@ public class Kernel
                 int hmmm = 5;
             }
             System.out.println("SEKANCIO, jei einamas buvo blokuotas, PROCESO_ID = " + OS.processDesc.get(next_process1).getId());
-            OS.processDesc.get(next_process1).getCpu();
+          //  OS.processDesc.get(next_process1).getCpu();
+            /*
             System.out.println("IC = " + OS.realMachine.getRegisterIC());
             System.out.println("MOD = " + OS.realMachine.isRegisterMOD());
+            */
             OS.processDesc.get(next_process1).setState("RUN");
             
             OS.kernel.procDesc.setProcessName(OS.processDesc.get(next_process1).getId());
         }
         
     }
-    public void pertraukimuApdorotojas()
-    {
-        int index;
-        index = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
-        OS.kernel.deaktyvuotiR(index);
-        index = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
-        OS.kernel.deaktyvuotiR(index);
-        if (OS.realMachine.getRegisterTI() == 0)
-        {
-            OS.realMachine.setRegisterTI(50);
-            OS.kernel.planuotojas();
-            return;
-        }
-        if(OS.realMachine.getRegisterAI() == 1)
-        {
-            int res = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
-            OS.kernel.aktyvuotiR(res, 1, "IVESK_PROGRAMA");
-//programos ivedimas
-            OS.realMachine.setRegisterAI(0);
-            return;
-        }
-        if(OS.realMachine.getRegisterAI() == 2)
-        {
-            int res = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
-            OS.kernel.aktyvuotiR(res, 1, "DARBO_PABAIGA");
-//OS darbo pabaiga
-            OS.realMachine.setRegisterAI(0);
-            return;
-        }
-        int id = OS.kernel.getProcDesc().getProcessName();
-        index = OS.kernel.findProc(id, OS.processDesc);
-        String name = OS.processDesc.get(index).getName();
-        if(name.equals("VIRTUAL_MACHINE"))
-        {
-            int govervId = OS.processDesc.get(index).getFather_processor();
-            OS.interruptedGovernor = govervId;
-            //int governIndex = OS.kernel.findProc(govervId, OS.processDesc);
-            OS.kernel.stopProc(id);
-            if(OS.realMachine.getRegisterSI() == 4)
-            {
-               int res = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
-               OS.kernel.aktyvuotiR(res, 1, "BAIGIAMAS_DARBAS");
-                
-               //OS.rmMemory[1].cell = "4";
-               
-               //Virtualios daro pabaiga
-               OS.realMachine.setRegisterSI(0);
-            }else
-            if(OS.realMachine.getRegisterSI() == 3)
-            {
-               //atmintiesPrasymas
-               int res = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
-               OS.kernel.aktyvuotiR(res, 1, "PAPILDOMA_ATMINTIS");
-               OS.realMachine.setRegisterSI(0);
-            }else
-            if(OS.realMachine.getRegisterSI() == 2)
-            {
-               int res = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
-               OS.kernel.aktyvuotiR(res, 1, "ISVEDIMAS");
-                //isvedimo prasymas
-               OS.realMachine.setRegisterSI(0);
-            }else
-            if(OS.realMachine.getRegisterSI() == 1)
-            {
-                int res = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
-                OS.kernel.aktyvuotiR(res, 1, "IVEDIMAS");
-                //ivedimo prasymas
-                OS.realMachine.setRegisterSI(0);
-            }else
-            {
-                int res = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
-                OS.kernel.aktyvuotiR(res, 1, "KLAIDA");
-                //ivedimo prasymas
-                OS.realMachine.setRegisterSI(0);
-                OS.realMachine.setRegisterPI(0);
-            }
-                
-            //OS.realMachine.setRegisterSI(0);
-            
-        }
-        /*index = OS.kernel.findProc(OS.kernel.procDesc.getProcessName(), OS.processDesc);
-        if(!OS.processDesc.get(index).getName().equals("INTERFACE"))
-        {
-            //reikia nustatyti job governor
-        }
-        else
-        {
-                
-        }*/
-       
-        
-    }
-    //procesu primityvai
     
    public void paskirstytojas(int r){
        
@@ -174,6 +92,7 @@ public class Kernel
             {
                 if( OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getList().size() > 0)
                 {
+                	/*
                     int proc_index = OS.kernel.findProc(OS.interruptedGovernor, OS.processDesc);
                     ArrList old = OS.processDesc.get(proc_index).getResource();
                     int resource = OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getList().get(0).part_of_resourse;
@@ -183,12 +102,13 @@ public class Kernel
                     OS.processDesc.get(proc_index).setResource(old);
                     this.aptarnautiProcesai.add(proc_index);
                     this.aptarnautuProcesuSkaicius++;
+                    */
                 }
             }
         }else
         {
        
-        
+        // System.out.println("**********************************************");
         System.out.println("resurso vardas: " + OS.resourseDesc.get(index).getName());
         System.out.println("laukianciu procesu: " + OS.resourseDesc.get(index).getLaukianciu_procesu_sarasas().getList().size());
         System.out.println("prieinamu resursu: " + OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getSize());
@@ -295,9 +215,11 @@ public class Kernel
         if( OS.processDesc.get(index).getOperating_memory().getList().size() > 0 ){
            for( Struct r : OS.processDesc.get(index).getOperating_memory().getList() ){
                int block_no = 10*r.processId;
+               /*
                for( int cn = 0; cn < 10 ; cn++){
                     OS.rmMemory[block_no + cn].freeCell();
                }
+               */
                OS.processDesc.get(index).getOperating_memory().getList().remove(r);
                OS.resourseDesc.get(r.processId).getPrieinamu_resursu_sarasas().addPa(r.part_of_resourse, "");
                
@@ -320,7 +242,7 @@ public class Kernel
     public void stopProc( int index ){
         int ind = OS.kernel.findProc(index, OS.processDesc);
         if( OS.processDesc.get(ind).getState().equals("RUN")){
-            OS.processDesc.get(ind).setCPU();
+         //   OS.processDesc.get(ind).setCPU();
             OS.processDesc.get(ind).setState("READYS");
             planuotojas();
         } else if ( OS.processDesc.get(ind).getState().equals("BLOCKED") ||
@@ -374,9 +296,9 @@ public class Kernel
     }
     public void prasytiResurso(int resourse, int part)
     {
-        /*int proc_id = OS.kernel.getProcDesc().getProcessName();
+        int proc_id = OS.kernel.getProcDesc().getProcessName();
         int proc_ind = OS.kernel.findProc(proc_id, OS.processDesc);
-        OS.processDesc.get(proc_ind).setState("BLOCKED");*/
+        OS.processDesc.get(proc_ind).setState("BLOCKED");
         int index = OS.kernel.findRes(resourse, OS.resourseDesc);
         ArrList old = OS.resourseDesc.get(index).getLaukianciu_procesu_sarasas();
         int id = OS.kernel.procDesc.getProcessName();
@@ -407,6 +329,7 @@ public class Kernel
             }
             else
             {
+            	System.out.println("ESU CIA");
                 einamas = false;
             }
         }

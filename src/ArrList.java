@@ -1,4 +1,4 @@
-package os;
+
 
 import java.awt.List;
 import static java.lang.System.out;
@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+/**
+ *
+ * @author eimantas
+ */
+
 /*
-    LaukianÄ�iÅ³ procesÅ³ sÄ…raÅ¡as
+    Laukian�?ių procesų sąrašas
 */
 public class ArrList {
         

@@ -1,5 +1,14 @@
-package os;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
+
+/**
+ *
+ * @author Algirdas
+ */
 public class Memory 
 {
     boolean state;
@@ -22,7 +31,7 @@ public class Memory
     {
         if( this.isState() )
         {
-            OS.realMachine.setRegisterPI(1);
+          //  OS.realMachine.setRegisterPI(1);
         } else
         {
             this.cell = cell;

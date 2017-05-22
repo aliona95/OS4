@@ -1,5 +1,9 @@
-package os;
 
+
+/**
+ *
+ * @author eimantas
+ */
 public class RealMachine {
     
     private String registerR;
@@ -589,7 +593,7 @@ public class RealMachine {
   
     public void xchgn()
     {
-        OS.cd.DataExchange();
+        //OS.cd.DataExchange();
     }
 
     public int getRegisterAI()
