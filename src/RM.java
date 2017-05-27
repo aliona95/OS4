@@ -1,3 +1,4 @@
+package os;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Label;
@@ -28,6 +29,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
 // norint pakeisti failu sistemos failo pavadinima:
 // ctrl+f fileSystem = "failas.txt";
 public class RM {
@@ -351,7 +353,7 @@ public class RM {
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setEnabled(false);
-		scrollPane_1.setBounds(10, 455, 343, 212);
+		scrollPane_1.setBounds(10, 455, 400, 212);
 		frmMm.getContentPane().add(scrollPane_1);
 		
 		table = new JTable();
@@ -384,11 +386,21 @@ public class RM {
 		lblProcesSraas.setBounds(97, 429, 112, 14);
 		frmMm.getContentPane().add(lblProcesSraas);
 		
-		btnPradti.addActionListener( new ActionListener()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {
-		    	
+		JLabel lblProgramosvedimas = new JLabel("Programos \u012Fvedimas");
+		lblProgramosvedimas.setForeground(new Color(0, 128, 128));
+		lblProgramosvedimas.setBounds(477, 429, 197, 14);
+		frmMm.getContentPane().add(lblProgramosvedimas);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBackground(new Color(255, 255, 153));
+		textPane.setBounds(477, 455, 324, 118);
+		frmMm.getContentPane().add(textPane);
+		
+		btnPradti.addActionListener( new ActionListener(){
+		    public void actionPerformed(ActionEvent e){
+		    	//Uzsetinam AI ir isaukiame pertraukima, kad pradetume vykdyti programa
+		    	//System.out.println("Mygtukas pradeti");
+		        OS.realMachine.setRegisterAI(1);
 		    }
 		});
 		System.out.println(panel.getComponentCount());

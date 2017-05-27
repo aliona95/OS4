@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
+package os;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Algirdas
- */
 public class MachineThread extends Thread
 {
     public void run()
@@ -19,22 +11,16 @@ public class MachineThread extends Thread
         //boolean kk = false;
         while(!OS.osEnd)
         {
-        	/*
-            if(OS.startInput)
-            {
-                
-                
+            if(OS.startInput){   
                 InputThread inputThread = new InputThread();
                 inputThread.start();
                 
             }
-            */
             if(OS.inputStreamOk)
             {
                 System.out.println("aktivuojamo proceso ID: " + OS.blockedProcessId);
                 OS.kernel.acivateProc(OS.blockedProcessId);
             }
-            //zingsnis++;
             try
             {
                 //System.out.println("zingsnis: " + zingsnis);

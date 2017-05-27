@@ -1,12 +1,7 @@
-
+package os;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-/**
- *
- * @author eimantas
- */
 public class ProcessDescriptor {
     
     private static int process_id_counter = 0; 
@@ -38,8 +33,6 @@ public class ProcessDescriptor {
     /*
     Proceso veikimui užstatomos/gaunamos realios mašinos registrų reikšmės
     */
-    
-    /*
     public void setCPU(){
         
         cpu.setRegisterR(OS.realMachine.getRegisterR());
@@ -66,7 +59,7 @@ public class ProcessDescriptor {
         //OS.realMachine.setRegisterSI(cpu.getRegisterSI());
         OS.realMachine.setRegisterC(cpu.isRegisterC());
         OS.realMachine.setRegisterMOD(cpu.isRegisterMOD());
-    }*/
+    }
     public CPU getCpu2()
     {
         return this.cpu;
