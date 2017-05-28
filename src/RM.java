@@ -396,10 +396,15 @@ public class RM {
 		textPane.setBounds(477, 455, 324, 118);
 		frmMm.getContentPane().add(textPane);
 		
+		
+		
+		
 		btnPradti.addActionListener( new ActionListener(){
 		    public void actionPerformed(ActionEvent e){
 		    	//Uzsetinam AI ir isaukiame pertraukima, kad pradetume vykdyti programa
 		    	//System.out.println("Mygtukas pradeti");
+		    	String uzduotiesPav = textPane.getText();
+		    	OS.realMachine.setUzduotiesPav(uzduotiesPav);
 		        OS.realMachine.setRegisterAI(1);
 		    }
 		});

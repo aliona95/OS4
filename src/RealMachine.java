@@ -1,7 +1,8 @@
 package os;
 
 public class RealMachine {
-    
+	
+    private String uzduotiesPav;
     private String registerR;
     
     
@@ -957,4 +958,10 @@ public class RealMachine {
             jump(adr);
         }
     }
+	public String getUzduotiesPav() {
+		return uzduotiesPav;
+	}
+	public void setUzduotiesPav(String uzduotiesPav) {
+		this.uzduotiesPav = uzduotiesPav;
+	}
 }

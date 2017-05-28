@@ -4,17 +4,17 @@ package os;
 
 import static java.lang.String.*;
 import static java.lang.System.out;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OS { 
-
-    /**
-     * @param args the command line arguments
-     */  
-    
+public class OS { 	
+	public static int address = 0;
     public static boolean osEnd = false;
     
     public static int interruptedGovernor;
@@ -54,7 +54,6 @@ public class OS {
     public static final int VM_MEMORY_SIZE = 100;
     public static final int EXTERNAL_MEMORY_SIZE = 4000;
     
-   // public static GUI gui = new GUI();
     //agregatai
     public static RealMachine realMachine = new RealMachine();
     //public static VirtualMachine virtualMachine = new VirtualMachine();
@@ -63,6 +62,13 @@ public class OS {
     public static ArrayList<ResourseDescriptor> resourseDesc = new ArrayList<>();
     public static Kernel kernel = new Kernel();
     
+    
+    ///!!!!!!!!!
+    public final static int WORD_SIZE = 4;
+	public final static int BLOCK_SIZE = 16;
+	public final static int USER_BLOCKS = 48;
+	private final static int BLOCKS = 64;
+    public static byte memory[] = new byte[BLOCKS * BLOCK_SIZE * WORD_SIZE];
     
     
     public static Paging paging = new Paging();
@@ -211,8 +217,7 @@ public class OS {
                     case "JobGovernor":{
                         break;
                     }
-                    case "ReadLine":
-                    {
+                    case "ReadLine":{
                         readline(Integer.valueOf(line));
                         break;
                     }
@@ -292,11 +297,7 @@ public class OS {
         pa = new ArrList();
         //pa.addPa(1);
         OS.kernel.kurtiResursa(false, pa, adr, "VartotojoSasaja");
-        
-        pa = new ArrList();
-        //pa.addPa(1);
-        OS.kernel.kurtiResursa(false, pa, adr, "UzduotisSupervizorineiAtmintyje");
-        
+           
         pa = new ArrList();
         //pa.addPa(1);
         OS.kernel.kurtiResursa(false, pa, adr, "UzduotiesVykdymoParametraiSupAtm");
@@ -317,7 +318,14 @@ public class OS {
         //pa.addPa(1);
         OS.kernel.kurtiResursa(false, pa, adr, "UzduotisBugne");
         
+        pa = new ArrList();
+        //pa.addPa(1);
+        OS.kernel.kurtiResursa(false, pa, adr, "SupervizorineAtmintis");
         
+       
+    	pa = new ArrList();
+        //pa.addPa(1);
+        OS.kernel.kurtiResursa(false, pa, adr, "UzduotisSupervizorineiAtmintyje");
         
         // turetume pakeisti i vartotojo ivedimas tikriausiai kuris ivestu uzduoti dar idedame i pasiruosusiu sarasa
         pa = new ArrList();
@@ -442,34 +450,73 @@ public class OS {
                 OS.rmMemory[1].cell = "1";
                 break;
             }
-            case 1:  {
+            case 1: {
             	// programos failu nuskaitymas ir suskaldymas i blokus
-            	System.out.println("pradedu nuskaitinet progrmama????");
+            	System.out.println("Skaitymas");
+                //	getProgramFromFileSystem(OS.realMachine.getUzduotiesPav());
+            	 OS.rmMemory[1].cell = "2";
                 break;
             }
             case 2:{
                 // blokavimasis laukiant resurso supervizorine atmintis
+            	int res = OS.kernel.findResName("SupervizorineAtmintis", OS.resourseDesc);
+                OS.kernel.prasytiResurso(res, 1);
+                OS.kernel.aktyvuotiR(res, 1, "SupervizorineAtmintis"); 
+                OS.rmMemory[1].cell = "3";
                 break;
             }
             case 3: {               
                 // bloku kopijavimas i supervizorine atminti
+            	 getProgramFromFileSystem(OS.realMachine.getUzduotiesPav());
+            	 OS.rmMemory[1].cell = "4";
                 break;
-            }
+            }	
             case 4: {
                 // sukuriamas ir atlaisvinamas resursas uzduotis supervizorineje atmintyje
-                break;
-            }
-            
-            //Naikintis turetu kazkaip???
-            case 5:{
-            	int res = OS.kernel.findResName("DARBO_PABAIGA", resourseDesc);
-                OS.kernel.aktyvuotiR(res, 1, "");
-                OS.rmMemory[1].cell = "0";
+            	int res = OS.kernel.findResName("UzduotisSupervizorineiAtmintyje", OS.resourseDesc);
+            	//OS.kernel.prasytiResurso(res, 1);
+                OS.kernel.aktyvuotiR(res, 1, "UzduotisSupervizorineiAtmintyje"); 
+           	    OS.rmMemory[2].cell = "1";
                 break;
             }  
         }
     }
+    public static void getProgramFromFileSystem(String uzd){
+    	BufferedReader inputStream;
+		try {
+			inputStream = new BufferedReader(new FileReader("failas.txt"));
+			String command = "";
+	     	while(!(command = inputStream.readLine()).equals("#" + uzd)){
+	     		//System.out.println("Komanda " +command);
+	     	} // failu sistemoje randame programa
+	     	
+	     	while(!(command = inputStream.readLine()).equals("$END")){
+	     		address++;
+	     		System.out.println("Komanda " +command);
+	     		writeToMemory(command, address);
+	     		if(command.equals(null)){
+	     			break;
+	     		}
+	     	}
+	     	address++; //irasom END dar
+	     	writeToMemory(command, address);
+	     	System.out.println("Komanda " +command);
+	    	inputStream.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public static void writeToMemory(String command, int address){
+    	for(int i = 0; i < WORD_SIZE; i++){
+    		memory[address + i] = (byte) command.charAt(i); 
+    	}
+    }
+    
     public static void JCL(int line){
+    	String block = " ";
+    	int address = 0; //pokol kas reikes ji kazkap susieti
         switch(line){
             case 0:{
                 String res = "UzduotisSupervizorineiAtmintyje";
@@ -478,6 +525,31 @@ public class OS {
                 OS.rmMemory[2].cell = "1";
                 break;
             }
+            case 1:{
+            	// programos bloku iniciavimas
+            	OS.rmMemory[2].cell = "2";
+            	break;
+            }
+            case 2:{
+            	// imamamas pirmas blokas ir supervizorines atminties
+            	for(int i = 0; i < BLOCK_SIZE; i++){
+            		 block += memory[address]; 
+            	}
+            	OS.rmMemory[2].cell = "3";
+            }
+            case 3:{
+            	if(block.equals("$WOW")){
+            		
+            	}
+            }
+            case 4:{
+            	// atlaisvinamas resursas "Eiluteje atmintyje": Truksta $WOW bloko vartotojo programoje
+            	int res = OS.kernel.findResName("EiluteAtmintyje", OS.resourseDesc);
+                OS.kernel.prasytiResurso(res, 1);
+                OS.kernel.aktyvuotiR(res, 1, "EiluteAtmintyje"); 
+	            OS.rmMemory[2].cell = "0";
+            }
+            
             // uzduotis vykdymo parametrai supervizorineje atmityje
             case 13:{
             	break;
