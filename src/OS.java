@@ -179,6 +179,10 @@ public class OS {
                         inputProgram(Integer.valueOf(line));
                         break;
                     }
+                    case "Interrupt":{
+                    	interrupt(Integer.valueOf(line));
+                    	break;
+                    }
                     case "MainProc":{
                         mainProc(Integer.valueOf(line));
                         break;
@@ -205,7 +209,7 @@ public class OS {
             }
         }else if( !value.equals("COMMAND NOT FOUND") ){
         	realMachine.setRegisterIC(realMachine.getRegisterIC() + 1);
-            realMachine.doCommand(commandNumber, value);
+           // realMachine.doCommand(commandNumber, value);
         }
         else{
         	realMachine.setRegisterIC(realMachine.getRegisterIC() + 1);
@@ -391,6 +395,15 @@ public class OS {
                 cpu = new CPU(false, 0, ic);
                 priority = 2;
                 OS.kernel.createProcess(memory, resource, priority, cpu, "InputProgram");
+                rmMemory[ic].cell = "0";
+                rmMemory[0].cell = "2";
+                break;
+            }   
+            case 2:{
+                int ic = 3;
+                cpu = new CPU(false, 0, ic);
+                priority = 2;
+                OS.kernel.createProcess(memory, resource, priority, cpu, "Interrupt");
                 rmMemory[ic].cell = "0";
                 rmMemory[0].cell = "5";
                 break;
@@ -720,6 +733,21 @@ public class OS {
             
         }   
     }  
+    
+   public static void interrupt(int line){
+	   switch(line)
+       {
+           case 0:
+           {
+        	   String res = "VM_INTERRUPTED";
+               int id = OS.kernel.findResName(res, resourseDesc);
+               OS.kernel.prasytiResurso(id, 1);
+               OS.rmMemory[6].cell = "0";
+               break;
+        	   
+           }
+       }
+   }
    public static void mainProc(int line)
     {
         //String info = "";
@@ -1350,10 +1378,12 @@ public class OS {
         {
             OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getList().remove(0);
         }
+        /*
         for (int i = 0; i < OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getSize(); i++)
         {
             System.out.println("OA: " + OS.resourseDesc.get(index).getPrieinamu_resursu_sarasas().getList().get(i).part_of_resourse);
         }
+        */
         OS.kernel.planuotojas();
         OS.plan = false;
         MachineThread machineThread = new MachineThread();

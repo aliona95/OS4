@@ -73,12 +73,12 @@ public class Kernel
     	///Speju situ dalyku nereikia
         
     	int index;
-    	/*
+    	
         index = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
         OS.kernel.deaktyvuotiR(index);
         index = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
         OS.kernel.deaktyvuotiR(index);
-        */
+        
         
         //Jei programa per ilgai dirba
         if (OS.realMachine.getRegisterTI() == 0){

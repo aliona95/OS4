@@ -53,10 +53,6 @@ public class ProcessDescriptor {
         OS.realMachine.setRegisterPTR(cpu.getRegisterPTR());
         OS.realMachine.setRegisterIC(cpu.getRegisterIC());
         OS.realMachine.setRegisterSP(cpu.getRegisterSP());
-        OS.realMachine.setRegisterINT(cpu.getRegisterINT());
-        OS.realMachine.setRegisterCT(cpu.getRegisterCT());
-        //OS.realMachine.setRegisterPI(cpu.getRegisterPI());
-        //OS.realMachine.setRegisterSI(cpu.getRegisterSI());
         OS.realMachine.setRegisterC(cpu.isRegisterC());
         OS.realMachine.setRegisterMOD(cpu.isRegisterMOD());
     }

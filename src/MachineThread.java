@@ -17,7 +17,6 @@ public class MachineThread extends Thread
                 System.out.println("aktivuojamo proceso ID: " + OS.blockedProcessId);
                 OS.kernel.acivateProc(OS.blockedProcessId);
             }
-            //zingsnis++;
             try
             {
                 OS.cpu();
