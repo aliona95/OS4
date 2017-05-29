@@ -1,4 +1,3 @@
-package os;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -70,30 +69,35 @@ public class Kernel
         
     }
     public void pertraukimuApdorotojas(){
-        int index;
-        /*
+    	
+    	///Speju situ dalyku nereikia
+        
+    	int index;
+    	/*
         index = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
         OS.kernel.deaktyvuotiR(index);
         index = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
         OS.kernel.deaktyvuotiR(index);
         */
+        
+        //Jei programa per ilgai dirba
         if (OS.realMachine.getRegisterTI() == 0){
             OS.realMachine.setRegisterTI(50);
             OS.kernel.planuotojas();
             return;
         }
+        
         //programos ivedimas
         if(OS.realMachine.getRegisterAI() == 1){
-            int res = OS.kernel.findResName("VartotojoSasaja", OS.resourseDesc);
-            OS.kernel.aktyvuotiR(res, 1, "ProgramosIvedimas"); // padarysim resursui vartotojo sasasaja ir Programos pabaiga info
-            System.out.println("programos ivedimas");
+            int res = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
+            OS.kernel.aktyvuotiR(res, 1, "IVESK_PROGRAMA");
             OS.realMachine.setRegisterAI(0);
             return;
         }
+      //OS darbo pabaiga
         if(OS.realMachine.getRegisterAI() == 2){
-            int res = OS.kernel.findResName("NeiskuKOKS RESURSAS????", OS.resourseDesc); //gal vartojo sasaja???
+            int res = OS.kernel.findResName("PRANESIMAS_VARTOTOJUI", OS.resourseDesc);
             OS.kernel.aktyvuotiR(res, 1, "DARBO_PABAIGA");
-//OS darbo pabaiga
             OS.realMachine.setRegisterAI(0);
             return;
         }
@@ -105,7 +109,8 @@ public class Kernel
             OS.interruptedGovernor = govervId;
             //int governIndex = OS.kernel.findProc(govervId, OS.processDesc);
             OS.kernel.stopProc(id);
-            if(OS.realMachine.getRegisterSI() == 4){
+            if(OS.realMachine.getRegisterSI() == 4)
+            {
                int res = OS.kernel.findResName("VM_INTERRUPTED", OS.resourseDesc);
                OS.kernel.aktyvuotiR(res, 1, "BAIGIAMAS_DARBAS");
                 
@@ -395,10 +400,12 @@ public class Kernel
                 OS.kernel.pps.addPps(processName, OS.processDesc.get(index1).getPriority());
                 OS.processDesc.get(index1).setList_where_process_is(-1);
                 String state = OS.processDesc.get(index1).getState();
-                if (state.equals("BLOCKED")){
+                if (state.equals("BLOCKED"))
+                {
                     OS.processDesc.get(index1).setState("READY");
                 }
-                else{
+                else
+                {
                     OS.processDesc.get(index1).setState("READYS");
                 }
             }

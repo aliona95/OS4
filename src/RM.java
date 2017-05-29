@@ -1,4 +1,4 @@
-package os;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Label;
@@ -33,6 +33,9 @@ import javax.swing.JTextPane;
 // norint pakeisti failu sistemos failo pavadinima:
 // ctrl+f fileSystem = "failas.txt";
 public class RM {
+	public static JButton btnvesti;
+	public static JTextArea textArea1;
+	public static JTextArea textArea;
 	static JFrame frmMm;
 	public static JTable table_1;
 	public static String fileSystem;
@@ -189,8 +192,8 @@ public class RM {
 		textC.setBackground(Color.LIGHT_GRAY);
 		frmMm.getContentPane().add(textC);
 		
-		JButton btnPradti = new JButton("Prad\u0117ti");
-		btnPradti.setBounds(712, 644, 89, 23);
+		JButton btnPradti = new JButton("Programos \u012Fvedimas");
+		btnPradti.setBounds(637, 600, 164, 23);
 		btnPradti.setForeground(new Color(255, 255, 255));
 		btnPradti.setBackground(new Color(0, 128, 128));
 		frmMm.getContentPane().add(btnPradti);
@@ -381,39 +384,55 @@ public class RM {
 		scrollPane_1.setViewportView(table);
 		//RM.setProcessTable(0, "EIMANTAS", 100, "MIEGA");
 		
-		JLabel lblProcesSraas = new JLabel("Procesu sarasas");
+		JLabel lblProcesSraas = new JLabel("Proces\u0173 s\u0105ra\u0161as");
 		lblProcesSraas.setForeground(new Color(0, 128, 128));
 		lblProcesSraas.setBounds(97, 429, 112, 14);
 		frmMm.getContentPane().add(lblProcesSraas);
 		
-		JLabel lblProgramosvedimas = new JLabel("Programos \u012Fvedimas");
+		JLabel lblProgramosvedimas = new JLabel("\u012Evedimo/I\u0161vedimo srautas");
 		lblProgramosvedimas.setForeground(new Color(0, 128, 128));
 		lblProgramosvedimas.setBounds(477, 429, 197, 14);
 		frmMm.getContentPane().add(lblProgramosvedimas);
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setBackground(new Color(255, 255, 153));
-		textPane.setBounds(477, 455, 324, 118);
-		frmMm.getContentPane().add(textPane);
+	    btnvesti = new JButton("\u012Evesti");
+		btnvesti.setForeground(Color.WHITE);
+		btnvesti.setBackground(new Color(0, 128, 128));
+		btnvesti.setBounds(493, 600, 89, 23);
+		frmMm.getContentPane().add(btnvesti);
 		
+	    textArea = new JTextArea();
+	    textArea.setBackground(new Color(255, 255, 153));
+		textArea.setBounds(467, 457, 321, 129);
+		frmMm.getContentPane().add(textArea);
 		
+		JTextArea textArea1 = new JTextArea();
 		
+		btnPradti.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	System.out.println("BUTTONAS 1");
+	                OS.realMachine.setRegisterAI(1);
+	            }
+	        }
+	    );
 		
-		btnPradti.addActionListener( new ActionListener(){
-		    public void actionPerformed(ActionEvent e){
-		    	//Uzsetinam AI ir isaukiame pertraukima, kad pradetume vykdyti programa
-		    	//System.out.println("Mygtukas pradeti");
-		    	String uzduotiesPav = textPane.getText();
-		    	OS.realMachine.setUzduotiesPav(uzduotiesPav);
-		        OS.realMachine.setRegisterAI(1);
-		    }
-		});
 		System.out.println(panel.getComponentCount());
 		
 		//frmMm.setBounds(100, 100, 827, 717);
 		frmMm.setBounds(0, 0, 827, 717);
 		frmMm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
+	public JButton getInputButton(){
+	        return btnvesti;
+	}
+	public JTextArea getOutputArea(){
+		return textArea;
+	}
+	
+    public JTextArea getInputArea(){
+    	return textArea;
+	}
+	
 /*	public static void printMemory(){
 		String memory = "";
 		int counter = 0;

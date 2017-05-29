@@ -1,10 +1,13 @@
-package os;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Scanner;
+//import static os.OS.input;
+//import static os.OS.inputStarted;
+//import static os.OS.inputStreamOk;
+//import static os.OS.startInput;
 
 public class InputThread extends Thread
 {
@@ -12,10 +15,6 @@ public class InputThread extends Thread
     public void run()
     {
         System.out.println("ivedimo pradzia");
-        
-        
-        
-        /*
         OS.startInput = false;
         while(OS.inputStarted);
         //OS.inputStarted = true;
@@ -46,7 +45,6 @@ public class InputThread extends Thread
                 //Thread.currentThread().interrupt();
                 return;
             } 
-            
-          } );*/
+          } );
     }
 }

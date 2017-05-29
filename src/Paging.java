@@ -1,6 +1,6 @@
-package os;
 
 import static java.lang.System.out;
+
 
 public class Paging {
     private int blockNumber;

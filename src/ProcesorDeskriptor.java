@@ -1,4 +1,4 @@
-package os;
+
 public class ProcesorDeskriptor
 {
     private int processCount;

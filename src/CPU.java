@@ -1,7 +1,3 @@
-
-package os;
-
-
 public class CPU {
 
     private String registerR;

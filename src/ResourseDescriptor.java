@@ -1,6 +1,6 @@
-package os;
 
 import java.util.*;
+
 public class ResourseDescriptor {
     
     private static int resource_id_counter = 0; 

@@ -1,6 +1,6 @@
-package os;
 
 import static java.lang.String.*;
+
 
 public class VirtualMachine 
 {
